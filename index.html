@@ -229,7 +229,11 @@ footer.site .updated{margin-top:18px;font-size:.78rem;color:#B9C4DC}
 <style>
 .calc-head{margin:36px 0 -6px}
 .calc-head h3.sec{font-weight:800;font-size:clamp(1.35rem,2.8vw,1.95rem);letter-spacing:-.025em;line-height:1.05;margin:.35em 0 .4em}
-.calc-head .lede{max-width:68ch;color:var(--gray-text);font-size:.95rem;margin:0}
+.calc-head .lede{max-width:none;white-space:nowrap;color:var(--gray-text);font-size:.95rem;margin:0}
+/* nowrap above keeps this on one line at normal widths, but at narrow
+   (mobile) widths the line is wider than the viewport itself — wrapping
+   normally there avoids a horizontal scrollbar */
+@media(max-width:600px){.calc-head .lede{white-space:normal}}
 /* .formula-row2 above already carries a 40px bottom margin (meant to
    clear .dialgrid below it) — pulling this up compensates for that so the
    toggle sits close under the strip instead of floating well below it */
@@ -1111,7 +1115,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
 
   <h2 class="headline" style="display:none">In two influential papers, both released in 2024, <a href="https://shapingwork.mit.edu/research/the-simple-macroeconomics-of-ai/" target="_blank" rel="noopener">Daron Acemoglu</a> and <a href="https://www.frbsf.org/wp-content/uploads/AI-and-Growth-Aghion-Bunel.pdf" target="_blank" rel="noopener">Philippe Aghion &amp; Simon Bunel</a> use the same formula to forecast the impact of AI on Total Factor Productivity (TFP), but they reach very different conclusions.<br><br>A comparison of their papers shows how the researchers' different input assumptions shape their forecasts.</h2>
   <!-- ThreeFrameworks.html only: three-paper opening in place of the two-paper original above -->
-  <h2 class="headline"><a href="https://shapingwork.mit.edu/research/the-simple-macroeconomics-of-ai/" target="_blank" rel="noopener">Acemoglu (2024)</a>, <a href="https://www.frbsf.org/wp-content/uploads/AI-and-Growth-Aghion-Bunel.pdf" target="_blank" rel="noopener">Philippe Aghion &amp; Simon Bunel (2024)</a>, and <a href="https://www-cdn.anthropic.com/files/4zrzovbb/website/cf58f84d46a4a76bf5a5b039ac695fba6b80041c.pdf" target="_blank" rel="noopener">Korinek et al. (2026)</a> use similar formulas to forecast the impact of AI on Total Factor Productivity (TFP), but they reach very different conclusions.</h2>
+  <h2 class="headline">The seminal papers attempting to forecast the impact of AI on TFP, <a href="https://shapingwork.mit.edu/research/the-simple-macroeconomics-of-ai/" target="_blank" rel="noopener">Acemoglu (2024)</a>, <a href="https://www.frbsf.org/wp-content/uploads/AI-and-Growth-Aghion-Bunel.pdf" target="_blank" rel="noopener">Aghion and Bunel (2024)</a> and <a href="https://www-cdn.anthropic.com/files/4zrzovbb/website/cf58f84d46a4a76bf5a5b039ac695fba6b80041c.pdf" target="_blank" rel="noopener">Korinek et al. (2026)</a>, use similar formulas but reach very different conclusions.</h2>
   <p class="standfirst">We created this tool to let you be part of the discussion. Change the inputs according to what you think is most relevant and determine TFP growth within the task-based model from Acemoglu (2024). As AI research advances, estimates may change. Therefore, this tool is built to be updated, and we invite you to share new studies with us.</p>
   <p class="standfirst">We also present other models and estimates of TFP, Labor Productivity, and GDP Growth, demonstrating the vast array of opinions on these subjects.</p>
 
@@ -1729,7 +1733,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
             <!-- only one Korinek value here (same across all scenarios),
                  so it's a plain always-visible chip, not behind the
                  expand-to-reveal pattern the other three cards use -->
-            <button type="button" class="chip k" data-set="labshare" data-val="60">Korinek 60%</button>
+            <button type="button" class="chip k" data-set="labshare" data-val="60">Korinek et al. 60%</button>
           </div>
         </div>
         <details class="prov">
@@ -1770,7 +1774,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
               <div class="prov-right"><p>Korinek et al. use a base-period labor share in all scenarios, which they refer to as the conventional value for the US.</p></div>
             </div>
           </div>
-          <div class="diff"><b>Key differences</b><p>No difference in methodology, Aghion &amp; Bunel use value from Acemoglu's April draft.</p><p>Korinek refers to labor share as labor share of income, not value added. It is also not adjusted for AI exposure.</p><p>In the main specification, labor share of income is endogenous and falls over time due to AI.</p></div>
+          <div class="diff"><b>Key differences</b><p>No difference in methodology, Aghion &amp; Bunel use value from Acemoglu's April draft.</p><p>Korinek et al. refers to labor share as labor share of income, not value added. It is also not adjusted for AI exposure.</p><p>In the main specification, labor share of income is endogenous and falls over time due to AI.</p></div>
         </details>
       </section>
 
@@ -2222,17 +2226,17 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
     // that scenario's own four annual (2027–2030) percentage-point figures
     // from Anthropic's Economic Scenario Explorer — a four-year average
     // rather than the ten-year horizon the rest of this lane otherwise uses.
-    {id:"korinek-modest",lane:"gdp",name:"Korinek et. al<br>Modest Change",type:"point",value:0.28,display:"0.28",
+    {id:"korinek-modest",lane:"gdp",name:"Korinek et al.<br>Modest Change",type:"point",value:0.28,display:"0.28",
      headline:"0.2pp 2027 / 0.2pp 2028 / 0.3pp 2029 / 0.4pp 2030",
      cite:"Economic Scenarios for Transformative AI, Korinek et al. (2026).",
      link:"https://www.anthropic.com/institute/econ-scenarios",
      body:"The modest change scenario represents a world in which AI has about \"roughly the same kind of impact as the internet did.\" Their website presents 2027-2030's growth rates in the \"Modest Change Scenario\" where values are 0.2, 0.2, 0.3, and 0.4 percentage points above yearly GDP growth rate. We take the mean of those four years; this is our own calculation, over a four-year rather than a ten-year horizon."},
-    {id:"korinek-substantial",lane:"gdp",name:"Korinek et. al<br>Substantial Change",type:"point",value:1.85,display:"1.85",
+    {id:"korinek-substantial",lane:"gdp",name:"Korinek et al.<br>Substantial Change",type:"point",value:1.85,display:"1.85",
      headline:"0.7pp 2027 / 1.2pp 2028 / 2.1pp 2029 / 3.4pp 2030",
      cite:"Economic Scenarios for Transformative AI, Korinek et al. (2026).",
      link:"https://www.anthropic.com/institute/econ-scenarios",
      body:"The substantial change scenario represents a world in which AI \"half of all knowledge work by 2030\". Their website presents 2027-2030's growth rates in the \"Substantial Change Scenario\" where values are 0.7, 1.2, 2.1, and 3.4 percentage points above yearly GDP growth rate. We take the mean of those four years; this is our own calculation, over a four-year rather than a ten-year horizon."},
-    {id:"korinek-extreme",lane:"gdp",name:"Korinek et. al<br>Extreme Change",type:"point",value:6.85,display:"6.85",
+    {id:"korinek-extreme",lane:"gdp",name:"Korinek et al.<br>Extreme Change",type:"point",value:6.85,display:"6.85",
      headline:"1.6pp 2027 / 4.0pp 2028 / 8.4pp 2029 / 13.4pp 2030",
      cite:"Economic Scenarios for Transformative AI, Korinek et al. (2026).",
      link:"https://www.anthropic.com/institute/econ-scenarios",
@@ -3102,7 +3106,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
                   '<span class="eq-chunk">&Delta; ln TFP<sub>t</sub> &approx; &minus;[1/(1&minus;&sigma;)] &middot; ln[</span> '+
                   '<span class="eq-chunk">s<sub>K,t0</sub> + s<sub>L,t0</sub> ( 1 &minus; m<sub>t</sub> d<sub>t</sub> ( 1 &minus; e<sup>&minus;(1&minus;&sigma;)a<sub>t</sub></sup> ) ) e<sup>&minus;(1&minus;&sigma;)&Delta; ln A<sub>t</sub></sup> ]</span>'+
                 '</div>'+
-                '<p class="tile-eq-caption">Full specification Korinek\'s simulation runs on. For more information see his technical report: '+
+                '<p class="tile-eq-caption">Full specification Korinek et al.\'s simulation runs on. For more information see their technical report: '+
                   '<a href="https://www-cdn.anthropic.com/files/4zrzovbb/website/cf58f84d46a4a76bf5a5b039ac695fba6b80041c.pdf" target="_blank" rel="noopener">link</a>.</p>'+
               '</div>'+
             '</div>'+
