@@ -229,11 +229,7 @@ footer.site .updated{margin-top:18px;font-size:.78rem;color:#B9C4DC}
 <style>
 .calc-head{margin:36px 0 -6px}
 .calc-head h3.sec{font-weight:800;font-size:clamp(1.35rem,2.8vw,1.95rem);letter-spacing:-.025em;line-height:1.05;margin:.35em 0 .4em}
-.calc-head .lede{max-width:none;white-space:nowrap;color:var(--gray-text);font-size:.95rem;margin:0}
-/* nowrap above keeps this on one line at normal widths, but at narrow
-   (mobile) widths the line is wider than the viewport itself — wrapping
-   normally there avoids a horizontal scrollbar */
-@media(max-width:600px){.calc-head .lede{white-space:normal}}
+.calc-head .lede{max-width:none;color:var(--gray-text);font-size:.95rem;margin:0}
 /* .formula-row2 above already carries a 40px bottom margin (meant to
    clear .dialgrid below it) — pulling this up compensates for that so the
    toggle sits close under the strip instead of floating well below it */
@@ -1210,7 +1206,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
 
   <div class="calc-head">
     <h3 class="sec">Use your own values to calculate TFP growth from AI</h3>
-    <p class="lede">The dials below can be set at Acemoglu's, Aghion &amp; Bunel's, Korinek et al.'s or your own preferred values.</p>
+    <p class="lede">The dials below can be set at Acemoglu's, Aghion &amp; Bunel's, Korinek et al.'s or your own preferred values. You can change between Acemoglu / Aghion &amp; Bunel's and Korinek et al.'s frameworks by choosing your preferred definition's button. We also include an estimate horizon dial that allows you to choose over what period the changes in TFP accumulate.</p>
   </div>
 
   <div class="formula" aria-hidden="true" style="display:none">
@@ -1840,6 +1836,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
     <div class="notes">
       <div>
         <h3 class="sec">Alternative Scenarios Considered by the Economists</h3>
+        <p class="lede">This section allows you to explore other considerations the economists make in their papers.</p>
         <p class="notes-sub">Acemoglu's variants</p>
         <ul class="check-list">
           <li><b>0.53%</b> — hard-to-learn tasks. 72.6% of exposed tasks by wage bill are easy; cost savings on the rest assumed at 7% rather than 27%. The estimate he considers most reasonable.</li>
