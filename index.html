@@ -1074,7 +1074,11 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
 .tile-eq-box{cursor:pointer}
 .tile-eq-box:hover{border-color:var(--navy);background:var(--pale)}
 .tile-eq-box:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
-.tile-eq-detail{display:block;margin-top:14px}
+/* no display:block here — the [hidden] attribute's own display:none has
+   equal specificity to any class rule and loses to it once that class
+   rule is also present, so setting display here would defeat [hidden]
+   entirely and the detail would show up always, toggle or not */
+.tile-eq-detail{margin-top:14px}
 .tile-eq{
   margin:2px 0;font-family:var(--mono);font-size:.78rem;line-height:1.5;
   color:var(--near-black);max-width:100%;
@@ -3084,23 +3088,23 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
           '<div class="tile-cell tile-cell-wide">'+
             '<div class="tile tile-eq-box" role="button" tabindex="0" aria-expanded="false">'+
               '<span class="tile-value tile-eq-title">TFP equation with ideas component</span>'+
-              '<span class="tile-eq-detail" hidden>'+
+              '<div class="tile-eq-detail" hidden>'+
                 '<div class="tile-eq"><span class="eq-chunk">&Delta; ln TFP<sub>t</sub> &approx; s<sub>L,t0</sub> ( &Delta; ln A<sub>t</sub> + m<sub>t</sub> d<sub>t</sub> a<sub>t</sub> )</span></div>'+
                 '<p class="tile-eq-caption">Includes an ideas stock component.</p>'+
-              '</span>'+
+              '</div>'+
             '</div>'+
           '</div>'+
           '<div class="tile-cell tile-cell-wide">'+
             '<div class="tile tile-eq-box" role="button" tabindex="0" aria-expanded="false">'+
               '<span class="tile-value tile-eq-title">Full specification</span>'+
-              '<span class="tile-eq-detail" hidden>'+
+              '<div class="tile-eq-detail" hidden>'+
                 '<div class="tile-eq">'+
                   '<span class="eq-chunk">&Delta; ln TFP<sub>t</sub> &approx; &minus;[1/(1&minus;&sigma;)] &middot; ln[</span> '+
                   '<span class="eq-chunk">s<sub>K,t0</sub> + s<sub>L,t0</sub> ( 1 &minus; m<sub>t</sub> d<sub>t</sub> ( 1 &minus; e<sup>&minus;(1&minus;&sigma;)a<sub>t</sub></sup> ) ) e<sup>&minus;(1&minus;&sigma;)&Delta; ln A<sub>t</sub></sup> ]</span>'+
                 '</div>'+
                 '<p class="tile-eq-caption">Full specification Korinek\'s simulation runs on. For more information see his technical report: '+
                   '<a href="https://www-cdn.anthropic.com/files/4zrzovbb/website/cf58f84d46a4a76bf5a5b039ac695fba6b80041c.pdf" target="_blank" rel="noopener">link</a>.</p>'+
-              '</span>'+
+              '</div>'+
             '</div>'+
           '</div>'+
         '</div>'+
