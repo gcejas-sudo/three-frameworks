@@ -1084,7 +1084,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
   color:var(--near-black);max-width:100%;
 }
 .eq-chunk{white-space:nowrap}
-.tile-eq-caption{margin:8px 0 0;max-width:46ch;font-size:.78rem;line-height:1.5;color:var(--gray-text)}
+.tile-eq-caption{margin:8px auto 0;max-width:46ch;font-size:.78rem;line-height:1.5;color:var(--gray-text);text-align:center}
 .tile-eq-caption a{color:var(--korinek)}
 </style>
 </head>
@@ -3354,7 +3354,17 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
     var cumPct=parseFloat(fOutEl.textContent),horizon=parseFloat(hEl.value);
     if(isNaN(cumPct)||isNaN(horizon)||horizon<=0)return;
     leftText.textContent=fmt2(cumPct)+"% ÷ "+horizon+" years";
-    valEl.textContent=fmt2(cumPct/horizon)+" pp / yr";
+    // additive: implied annual gain now inverts compounding — ln(1+L)/T,
+    // where L is the cumulative result as a decimal — rather than a flat
+    // cumPct/T split. A straight division overstates the annual rate for
+    // any L>0, since it ignores that the earlier years' gains would
+    // themselves compound; this backs out the constant annual rate whose
+    // compounding over T years reproduces the stated cumulative L exactly.
+    // Original expression kept, commented out, so this is reversible.
+    // valEl.textContent=fmt2(cumPct/horizon)+" pp / yr";
+    var cumFraction=cumPct/100;
+    var annualPct=(Math.log(1+cumFraction)/horizon)*100;
+    valEl.textContent=fmt2(annualPct)+" pp / yr";
   }
   var fOutEl=document.getElementById("fOut");
   if(fOutEl)new MutationObserver(updateHorizonRow).observe(fOutEl,{childList:true,characterData:true,subtree:true});
