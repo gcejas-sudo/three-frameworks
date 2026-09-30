@@ -383,7 +383,10 @@ footer.site .updated{margin-top:18px;font-size:.78rem;color:#B9C4DC}
 .dial h3{font-weight:700;font-size:1.14rem;letter-spacing:-.015em;margin:0;color:var(--navy)}
 .dial .q{margin:.35em 0 0;font-size:.92rem;color:var(--gray-text);max-width:48ch}
 .readout{font-family:var(--mono);font-weight:600;font-size:1.4rem;color:var(--maroon);font-variant-numeric:tabular-nums}
-.field{display:flex;align-items:flex-start;gap:14px;margin-top:18px}
+/* flex-wrap added so .chip-row (flex-basis:100% below) can drop onto its
+   own full-width line under .track+.num, without changing how those two
+   lay out on the first line (their combined width already fits) */
+.field{display:flex;align-items:flex-start;gap:14px;margin-top:18px;flex-wrap:wrap}
 .track{flex:1;min-width:0;position:relative}
 /* additive: small reference notches directly on the slider's own gray bar
    at Acemoglu's and Aghion & Bunel's values — the bar itself previously had
@@ -418,7 +421,17 @@ footer.site .updated{margin-top:18px;font-size:.78rem;color:#B9C4DC}
    above (both hidden per-instance, not deleted) — one flex row per card,
    author chips first, then (cards with Korinek scenarios only) a divider,
    a small KORINEK label, and one chip per scenario. */
-.chip-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:8px;padding-top:10px;border-top:0.5px solid #d9d9d9}
+/* flex-basis:100% — as a flex item of .field (now wrap-enabled above),
+   this drops onto its own line spanning the FULL field width (track +
+   number box + the gap between them) rather than just .track's own
+   narrower width, which is what forced "Korinek et al." onto a second
+   line by itself at most 2-column widths */
+.chip-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;flex-basis:100%;margin-top:8px;padding-top:10px;border-top:0.5px solid #d9d9d9}
+/* additive: horizon-only variant — each chip is pinned directly under its
+   own rail-notch/tick position (same 18.1818%/54.5455% used there) instead
+   of packing left-to-right like the other four sliders' chip-rows */
+.chip-row-pinned{position:relative;min-height:26px}
+.chip-row-pinned .chip{position:absolute;top:0;transform:translateX(-50%)}
 .chip{
   font-family:var(--mono);font-size:11px;padding:5px 9px;border-radius:14px;border:1px solid;
   background:var(--white);cursor:pointer;white-space:nowrap;line-height:1;
@@ -1265,19 +1278,25 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
               <span class="kor-mark2-range-onrule">modest &rsaquo; extreme</span>
               <div class="kor-mark2-left">Korinek<br>et al.</div>
             </div>
-            <div class="chip-row">
-              <button type="button" class="chip a" data-set="exposure" data-val="20">Acemoglu 20%</button>
-              <button type="button" class="chip g" data-set="exposure" data-val="60">Aghion &amp; Bunel 60%</button>
-              <span class="chip-divider"></span>
-              <button type="button" class="chip k chip-korinek-label" aria-expanded="false">Korinek et al.</button>
-              <span class="kor-chip-group" hidden>
-                <button type="button" class="chip k" data-set="exposure" data-val="20">Modest 20%</button>
-                <button type="button" class="chip k" data-set="exposure" data-val="30">Substantial 30%</button>
-                <button type="button" class="chip k" data-set="exposure" data-val="50">Extreme 50%</button>
-              </span>
-            </div>
           </div>
           <input type="number" class="num" id="n-exposure" min="0" max="100" step="0.1" value="20" aria-label="GDP share of exposed tasks, percent, exact value">
+          <!-- additive: moved out of .track into .field itself (with
+               flex-basis:100%, below) so this row can use the full card
+               width — including the space under the number box — rather
+               than being capped at the track's own (narrower) width,
+               which was forcing "Korinek et al." onto its own line at
+               most 2-column widths -->
+          <div class="chip-row">
+            <button type="button" class="chip a" data-set="exposure" data-val="20">Acemoglu 20%</button>
+            <button type="button" class="chip g" data-set="exposure" data-val="60">Aghion &amp; Bunel 60%</button>
+            <span class="chip-divider"></span>
+            <button type="button" class="chip k chip-korinek-label" aria-expanded="false">Korinek et al.</button>
+            <span class="kor-chip-group" hidden>
+              <button type="button" class="chip k" data-set="exposure" data-val="20">Modest 20%</button>
+              <button type="button" class="chip k" data-set="exposure" data-val="30">Substantial 30%</button>
+              <button type="button" class="chip k" data-set="exposure" data-val="50">Extreme 50%</button>
+            </span>
+          </div>
         </div>
         <details class="prov">
           <summary>How each economist gets there</summary>
@@ -1368,19 +1387,23 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
               <span class="kor-mark2-range-onrule">modest &rsaquo; extreme</span>
               <div class="kor-mark2-left">Korinek<br>et al.</div>
             </div>
-            <div class="chip-row">
-              <button type="button" class="chip a" data-set="automatable" data-val="23">Acemoglu 23%</button>
-              <button type="button" class="chip g" data-set="automatable" data-val="50">Aghion &amp; Bunel 50%</button>
-              <span class="chip-divider"></span>
-              <button type="button" class="chip k chip-korinek-label" aria-expanded="false">Korinek et al.</button>
-              <span class="kor-chip-group" hidden>
-                <button type="button" class="chip k" data-set="automatable" data-val="20">Modest 20%</button>
-                <button type="button" class="chip k" data-set="automatable" data-val="40">Substantial 40%</button>
-                <button type="button" class="chip k" data-set="automatable" data-val="60">Extreme 60%</button>
-              </span>
-            </div>
           </div>
           <input type="number" class="num" id="n-automatable" min="0" max="100" step="0.1" value="23" aria-label="Share of exposed tasks profitable to automate, percent, exact value">
+          <!-- additive: moved out of .track into .field itself (see
+               .chip-row's flex-basis:100% rule) so this row can use the
+               full card width, including under the number box, rather
+               than being capped at the track's own narrower width -->
+          <div class="chip-row">
+            <button type="button" class="chip a" data-set="automatable" data-val="23">Acemoglu 23%</button>
+            <button type="button" class="chip g" data-set="automatable" data-val="50">Aghion &amp; Bunel 50%</button>
+            <span class="chip-divider"></span>
+            <button type="button" class="chip k chip-korinek-label" aria-expanded="false">Korinek et al.</button>
+            <span class="kor-chip-group" hidden>
+              <button type="button" class="chip k" data-set="automatable" data-val="20">Modest 20%</button>
+              <button type="button" class="chip k" data-set="automatable" data-val="40">Substantial 40%</button>
+              <button type="button" class="chip k" data-set="automatable" data-val="60">Extreme 60%</button>
+            </span>
+          </div>
         </div>
         <details class="prov">
           <summary>How each economist gets there</summary>
@@ -1471,20 +1494,24 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
               <span class="kor-mark2-range-onrule">modest &rsaquo; extreme</span>
               <div class="kor-mark2-left">Korinek<br>et al.</div>
             </div>
-            <div class="chip-row">
-              <button type="button" class="chip a" data-set="savings" data-val="27">Acemoglu 27%</button>
-              <button type="button" class="chip g" data-set="savings" data-val="40">Aghion &amp; Bunel 40%</button>
-              <span class="chip-divider"></span>
-              <button type="button" class="chip k chip-korinek-label" aria-expanded="false">Korinek et al.</button>
-              <span class="kor-chip-group" hidden>
-                <button type="button" class="chip k" data-set="savings" data-val="30">Modest 0.30</button>
-                <button type="button" class="chip k" data-set="savings" data-val="45">Substantial 0.45</button>
-                <button type="button" class="chip k" data-set="savings" data-val="80">Extreme 0.80</button>
-              </span>
-            </div>
             <p class="kor-unit-note">Korinek et al.'s values are log points, not percentages. They are equivalent to productivity gains of 35%, 57% and 123%.</p>
           </div>
           <input type="number" class="num" id="n-savings" min="0" max="100" step="0.1" value="27" aria-label="Average labor cost savings, percent, exact value">
+          <!-- additive: moved out of .track into .field itself (see
+               .chip-row's flex-basis:100% rule) so this row can use the
+               full card width, including under the number box, rather
+               than being capped at the track's own narrower width -->
+          <div class="chip-row">
+            <button type="button" class="chip a" data-set="savings" data-val="27">Acemoglu 27%</button>
+            <button type="button" class="chip g" data-set="savings" data-val="40">Aghion &amp; Bunel 40%</button>
+            <span class="chip-divider"></span>
+            <button type="button" class="chip k chip-korinek-label" aria-expanded="false">Korinek et al.</button>
+            <span class="kor-chip-group" hidden>
+              <button type="button" class="chip k" data-set="savings" data-val="30">Modest 0.30</button>
+              <button type="button" class="chip k" data-set="savings" data-val="45">Substantial 0.45</button>
+              <button type="button" class="chip k" data-set="savings" data-val="80">Extreme 0.80</button>
+            </span>
+          </div>
         </div>
         <details class="prov">
           <summary>Where does this number come from?</summary>
@@ -1656,16 +1683,20 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
               <span class="kor-mark2-range-onrule">all scenarios</span>
               <div class="kor-mark2-left">Korinek<br>et al.</div>
             </div>
-            <div class="chip-row">
-              <button type="button" class="chip a" data-set="labshare" data-val="53.5">Acemoglu 53.5%</button>
-              <button type="button" class="chip g" data-set="labshare" data-val="57">Aghion &amp; Bunel 57%</button>
-              <!-- only one Korinek value here (same across all scenarios),
-                   so it's a plain always-visible chip, not behind the
-                   expand-to-reveal pattern the other three cards use -->
-              <button type="button" class="chip k" data-set="labshare" data-val="60">Korinek 60%</button>
-            </div>
           </div>
           <input type="number" class="num" id="n-labshare" min="0" max="100" step="0.1" value="53.5" aria-label="AI-exposure-adjusted labor share, percent, exact value">
+          <!-- additive: moved out of .track into .field itself (see
+               .chip-row's flex-basis:100% rule) so this row can use the
+               full card width, including under the number box, rather
+               than being capped at the track's own narrower width -->
+          <div class="chip-row">
+            <button type="button" class="chip a" data-set="labshare" data-val="53.5">Acemoglu 53.5%</button>
+            <button type="button" class="chip g" data-set="labshare" data-val="57">Aghion &amp; Bunel 57%</button>
+            <!-- only one Korinek value here (same across all scenarios),
+                 so it's a plain always-visible chip, not behind the
+                 expand-to-reveal pattern the other three cards use -->
+            <button type="button" class="chip k" data-set="labshare" data-val="60">Korinek 60%</button>
+          </div>
         </div>
         <details class="prov">
           <summary>How each economist gets there</summary>
@@ -1740,9 +1771,9 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
              sliders above, replacing the floating .ticks labels (hidden,
              not deleted) — .chip[data-set] already has a generic click
              handler wired for any data-set, so these work with no new JS -->
-        <div class="chip-row">
-          <button type="button" class="chip g" data-set="horizon" data-val="10">Acemoglu &middot; Aghion &amp; Bunel 10 years</button>
-          <button type="button" class="chip k" data-set="horizon" data-val="6">Korinek et al. 6 years</button>
+        <div class="chip-row chip-row-pinned">
+          <button type="button" class="chip g" data-set="horizon" data-val="10" style="left:54.5455%">Acemoglu &middot; Aghion &amp; Bunel 10 years</button>
+          <button type="button" class="chip k" data-set="horizon" data-val="6" style="left:18.1818%">Korinek et al. 6 years</button>
         </div>
       </div>
       <input type="number" class="num" id="n-horizon" min="4" max="15" step="1" value="10" aria-label="Years for these gains to arrive, exact value">
