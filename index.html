@@ -462,8 +462,13 @@ input.tfp-card:focus{background:rgba(255,255,255,.16);box-shadow:0 0 0 2px rgba(
    just at a different vertical row */
 .chip-row-pinned{position:relative;min-height:58px;border-top:none;padding-top:0}
 .chip-row-pinned .chip{position:absolute;transform:translateX(-50%)}
-.chip-row-pinned .chip.g{top:0}
-.chip-row-pinned .chip.k{top:29px}
+/* Acemoglu and Aghion & Bunel share the same 10-year x-position, so they
+   need separate rows from each other; Korinek sits at a different
+   x-position (6 years) and so can safely share Acemoglu's row without
+   colliding */
+.chip-row-pinned .chip.a{top:0}
+.chip-row-pinned .chip.k{top:0}
+.chip-row-pinned .chip.g{top:29px}
 .chip{
   font-family:var(--mono);font-size:11px;padding:5px 9px;border-radius:14px;border:1px solid;
   background:var(--white);cursor:pointer;white-space:nowrap;line-height:1;
@@ -1848,7 +1853,8 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
              not deleted) — .chip[data-set] already has a generic click
              handler wired for any data-set, so these work with no new JS -->
         <div class="chip-row chip-row-pinned">
-          <button type="button" class="chip g" data-set="horizon" data-val="10" style="left:54.5455%">Acemoglu &middot; Aghion &amp; Bunel 10 years</button>
+          <button type="button" class="chip a" data-set="horizon" data-val="10" style="left:54.5455%">Acemoglu 10 years</button>
+          <button type="button" class="chip g" data-set="horizon" data-val="10" style="left:54.5455%">Aghion &amp; Bunel 10 years</button>
           <button type="button" class="chip k" data-set="horizon" data-val="6" style="left:18.1818%">Korinek et al. 6 years</button>
         </div>
       </div>
