@@ -354,6 +354,13 @@ footer.site .updated{margin-top:18px;font-size:.78rem;color:#B9C4DC}
   padding:14px 6px;text-align:center;font-family:var(--mono);font-size:34px;font-weight:700;color:#fff;
   letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
+/* the four term cards are now <input>s (directly editable) — reset the
+   native control chrome so an input reads identically to the plain div it
+   replaces, and add a visible-but-unobtrusive focus/hover cue so it's
+   still discoverable as something you can click into */
+input.tfp-card{border:none;outline:none;cursor:text;transition:background .12s ease}
+input.tfp-card:hover{background:rgba(255,255,255,.11)}
+input.tfp-card:focus{background:rgba(255,255,255,.16);box-shadow:0 0 0 2px rgba(255,255,255,.4) inset}
 .tfp-cap{
   height:34px;margin-top:9px;font-family:var(--mono);font-size:10px;line-height:1.45;
   color:#98a4ca;text-align:center;overflow:hidden;text-transform:capitalize;
@@ -1252,22 +1259,22 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
     </div>
     <div class="tfp-eq">
       <div class="tfp-term">
-        <div class="tfp-card" id="tfp-v1">20.0%</div>
+        <input class="tfp-card" id="tfp-v1" type="text" inputmode="decimal" value="20.0%" aria-label="GDP share of exposed tasks, percent">
         <div class="tfp-cap" id="tfp-cap1">GDP share of exposed tasks</div>
       </div>
       <span class="tfp-op">×</span>
       <div class="tfp-term">
-        <div class="tfp-card" id="tfp-v2">23.0%</div>
+        <input class="tfp-card" id="tfp-v2" type="text" inputmode="decimal" value="23.0%" aria-label="Share of exposed tasks profitable to automate, percent">
         <div class="tfp-cap" id="tfp-cap2">Share of exposed tasks profitable to automate</div>
       </div>
       <span class="tfp-op">×</span>
       <div class="tfp-term">
-        <div class="tfp-card" id="tfp-v3">27.0%</div>
+        <input class="tfp-card" id="tfp-v3" type="text" inputmode="decimal" value="27.0%" aria-label="Average cost savings from AI, percent">
         <div class="tfp-cap" id="tfp-cap3">Average cost savings from&nbsp;AI</div>
       </div>
       <span class="tfp-op">×</span>
       <div class="tfp-term">
-        <div class="tfp-card" id="tfp-v4">53.5%</div>
+        <input class="tfp-card" id="tfp-v4" type="text" inputmode="decimal" value="53.5%" aria-label="AI-exposure-adjusted labor share of Value Added, percent">
         <div class="tfp-cap" id="tfp-cap4">AI-exposure-adjusted labor share of Value Added</div>
       </div>
       <span class="tfp-op tfp-op-eq">=</span>
@@ -3678,7 +3685,15 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
 (function(){
   function mirrorText(srcId,dstId){
     var src=document.getElementById(srcId),dst=document.getElementById(dstId);
-    if(src&&dst)dst.textContent=src.textContent;
+    if(!src||!dst)return;
+    // tfp-v1..v4 are <input>s now (directly editable) — write .value, not
+    // .textContent, and skip it while the user is actively editing it so
+    // an in-progress edit is never overwritten out from under them
+    if(dst.tagName==="INPUT"){
+      if(document.activeElement!==dst)dst.value=src.textContent;
+    }else{
+      dst.textContent=src.textContent;
+    }
   }
   function mirrorValues(){
     mirrorText("f1","tfp-v1");
@@ -3691,6 +3706,36 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
   ["f1","f2","f3","f4","fOut"].forEach(function(id){
     var el=document.getElementById(id);
     if(el)new MutationObserver(mirrorValues).observe(el,{childList:true,characterData:true,subtree:true});
+  });
+
+  // additive: tfp-v1..v4 are directly editable — typing a number and
+  // pressing Enter or clicking away commits it to that term's actual
+  // slider (dispatching the same "input" event a drag would), so every
+  // downstream listener reacts exactly as it does to a drag. Commits on
+  // blur (Enter just blurs to trigger it), not every keystroke, so the
+  // live-typed text
+  // isn't fought over by mirrorValues() re-formatting it mid-edit.
+  var TFP_EDIT_SLIDER={"tfp-v1":"s-exposure","tfp-v2":"s-automatable","tfp-v3":"s-savings","tfp-v4":"s-labshare"};
+  Object.keys(TFP_EDIT_SLIDER).forEach(function(inputId){
+    var input=document.getElementById(inputId),slider=document.getElementById(TFP_EDIT_SLIDER[inputId]);
+    if(!input||!slider)return;
+    function commit(){
+      var v=parseFloat(input.value);
+      if(isNaN(v)){mirrorValues();return;} // not a number — revert to the actual value
+      v=Math.min(parseFloat(slider.max),Math.max(parseFloat(slider.min),v));
+      slider.value=v;
+      slider.dispatchEvent(new Event("input",{bubbles:true}));
+      // the MutationObserver on f1..f4 would eventually reformat this
+      // input's display too, but only as a queued microtask — call it here
+      // as well so a clamped value (e.g. typing 999) snaps to "100.0%"
+      // immediately instead of showing the raw typed number briefly
+      mirrorValues();
+    }
+    input.addEventListener("blur",commit);
+    input.addEventListener("keydown",function(e){
+      if(e.key==="Enter"){e.preventDefault();input.blur();} // blur fires "change" above
+    });
+    input.addEventListener("focus",function(){input.select();});
   });
 
   // whichever of the two .flabel spans for a term is actually visible,
