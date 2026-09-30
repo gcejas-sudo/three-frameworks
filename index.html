@@ -3178,6 +3178,18 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
       var boundBtn=e.target.closest(".bound-btn");
       if(boundBtn){
         var bCell=boundBtn.closest(".tile-cell"),bGrp=boundBtn.closest(".consider-group");
+        // additive: clicking the already-picked bound again closes back to
+        // the collapsed, nothing-selected state — otherwise, once a bound
+        // is chosen, the overlay's two buttons fully cover the tile
+        // underneath and there was no way to get back to "unselected"
+        if(boundBtn.classList.contains("is-active")){
+          var bTileClose=bCell.querySelector(".tile");
+          var bDetailClose=bGrp.querySelector(".tile-detail");
+          bDetailClose.innerHTML="";bDetailClose.classList.remove("is-filled");
+          closeBoundsOverlay(bTileClose);
+          if(bTileClose){bTileClose.classList.remove("is-active");bTileClose.setAttribute("aria-pressed","false");}
+          return;
+        }
         var bg=CONSIDERATIONS[bGrp.getAttribute("data-group")];
         var bIt=tilesOf(bg)[parseInt(boundBtn.getAttribute("data-idx"),10)];
         var which=boundBtn.getAttribute("data-bound")==="lo"?bIt.boundLo:bIt.boundHi;
