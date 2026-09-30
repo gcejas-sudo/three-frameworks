@@ -189,7 +189,11 @@ table.compare th.kor .th-sub{display:block;margin-top:4px;font-family:var(--sans
 table.compare .tfp-note{display:block;margin-top:3px;font-family:var(--sans);font-weight:400;font-size:.68rem;letter-spacing:0;white-space:normal;opacity:.8}
 
 /* ---------- notes grid ---------- */
-.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px;margin-top:24px}
+/* margin-top removed — in both places .notes is used (Other Considerations,
+   Sources) it's the first thing inside a .block card, so this 24px was
+   only pushing its h3.sec/summary.sec heading down below where every other
+   .block section's own heading sits, instead of both starting flush */
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px}
 .notes details summary{cursor:pointer;list-style:none;margin:.35em 0 .4em}
 .notes details summary::-webkit-details-marker{display:none}
 .notes details summary::before{content:"+ ";font-family:var(--mono);font-size:.6em;vertical-align:.15em;color:var(--blue)}
@@ -430,7 +434,10 @@ footer.site .updated{margin-top:18px;font-size:.78rem;color:#B9C4DC}
 /* additive: horizon-only variant — each chip is pinned directly under its
    own rail-notch/tick position (same 18.1818%/54.5455% used there) instead
    of packing left-to-right like the other four sliders' chip-rows */
-.chip-row-pinned{position:relative;min-height:26px}
+/* no divider here — unlike the other four sliders, this row sits right
+   under the track/scale with no chip-korinek-label row above it to
+   separate from, so the line just read as clutter */
+.chip-row-pinned{position:relative;min-height:26px;border-top:none;padding-top:0}
 .chip-row-pinned .chip{position:absolute;top:0;transform:translateX(-50%)}
 .chip{
   font-family:var(--mono);font-size:11px;padding:5px 9px;border-radius:14px;border:1px solid;
@@ -1052,6 +1059,29 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
   line-height:1.3;text-transform:uppercase;color:var(--navy);
 }
 .consider-head+.tile-row{margin-top:12px}
+/* two boxes instead of four, each spanning two of the row's four columns */
+.tile-cell-wide{grid-column:span 2}
+/* Korinek equation boxes: closed, they show only a title in the same
+   .tile-value font/color as the Acemoglu/Aghion boxes' numbers — but
+   .tile-value assumes a short number, so a long title needs to wrap and
+   drop the number-specific tabular-nums/negative letter-spacing rather
+   than overflow or get clipped on one line. Clicking (or Enter/Space)
+   reveals the equation + caption underneath, hidden until then. */
+.tile-eq-title{
+  white-space:normal;letter-spacing:normal;line-height:1.25;
+  font-size:clamp(1.05rem,2.2vw,1.4rem);font-variant-numeric:normal;
+}
+.tile-eq-box{cursor:pointer}
+.tile-eq-box:hover{border-color:var(--navy);background:var(--pale)}
+.tile-eq-box:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+.tile-eq-detail{display:block;margin-top:14px}
+.tile-eq{
+  margin:2px 0;font-family:var(--mono);font-size:.78rem;line-height:1.5;
+  color:var(--near-black);max-width:100%;
+}
+.eq-chunk{white-space:nowrap}
+.tile-eq-caption{margin:8px 0 0;max-width:46ch;font-size:.78rem;line-height:1.5;color:var(--gray-text)}
+.tile-eq-caption a{color:var(--korinek)}
 </style>
 </head>
 <body>
@@ -3029,6 +3059,78 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
     considerHost.innerHTML=Object.keys(CONSIDERATIONS).map(function(k){
       return groupHTML(k,CONSIDERATIONS[k]);
     }).join("");
+
+    // additive: a third, static Korinek et al. row appended after the two
+    // dynamic groups above (rather than added to CONSIDERATIONS/tileHTML)
+    // so their existing rendering, click and keyboard-nav logic is never
+    // touched. Reuses their exact classes (.consider-group with
+    // data-kind="result" for the Acemoglu row's solid border, .tile-value
+    // for the title so it matches the Acemoglu/Aghion boxes' numbers in
+    // font and color) so it matches visually without being wired into the
+    // tile/bound click system. Each box's equation+caption sit inside a
+    // .tile-eq-detail that's hidden until the box is clicked — a plain div
+    // with role="button" rather than a real <button>, because box 2's
+    // caption contains a real <a> link and a link can't legally nest
+    // inside a <button>. No MathJax/KaTeX is loaded on this page, so
+    // subscripts/superscripts are plain <sub>/<sup>. Box 2's equation is
+    // split into two nowrap spans (.eq-chunk) with an ordinary breakable
+    // space between them, right after "ln[" — so at widths where it
+    // doesn't fit on one line, the browser's own wrapping breaks exactly
+    // there instead of mid-expression anywhere else.
+    considerHost.insertAdjacentHTML("beforeend",
+      '<div class="consider-group" data-kind="result">'+
+        '<div class="consider-head"><h4 class="consider-label group-label">Korinek et al.\'s specifications</h4></div>'+
+        '<div class="tile-row">'+
+          '<div class="tile-cell tile-cell-wide">'+
+            '<div class="tile tile-eq-box" role="button" tabindex="0" aria-expanded="false">'+
+              '<span class="tile-value tile-eq-title">TFP equation with ideas component</span>'+
+              '<span class="tile-eq-detail" hidden>'+
+                '<div class="tile-eq"><span class="eq-chunk">&Delta; ln TFP<sub>t</sub> &approx; s<sub>L,t0</sub> ( &Delta; ln A<sub>t</sub> + m<sub>t</sub> d<sub>t</sub> a<sub>t</sub> )</span></div>'+
+                '<p class="tile-eq-caption">Includes an ideas stock component.</p>'+
+              '</span>'+
+            '</div>'+
+          '</div>'+
+          '<div class="tile-cell tile-cell-wide">'+
+            '<div class="tile tile-eq-box" role="button" tabindex="0" aria-expanded="false">'+
+              '<span class="tile-value tile-eq-title">Full specification</span>'+
+              '<span class="tile-eq-detail" hidden>'+
+                '<div class="tile-eq">'+
+                  '<span class="eq-chunk">&Delta; ln TFP<sub>t</sub> &approx; &minus;[1/(1&minus;&sigma;)] &middot; ln[</span> '+
+                  '<span class="eq-chunk">s<sub>K,t0</sub> + s<sub>L,t0</sub> ( 1 &minus; m<sub>t</sub> d<sub>t</sub> ( 1 &minus; e<sup>&minus;(1&minus;&sigma;)a<sub>t</sub></sup> ) ) e<sup>&minus;(1&minus;&sigma;)&Delta; ln A<sub>t</sub></sup> ]</span>'+
+                '</div>'+
+                '<p class="tile-eq-caption">Full specification Korinek\'s simulation runs on. For more information see his technical report: '+
+                  '<a href="https://www-cdn.anthropic.com/files/4zrzovbb/website/cf58f84d46a4a76bf5a5b039ac695fba6b80041c.pdf" target="_blank" rel="noopener">link</a>.</p>'+
+              '</span>'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>');
+
+    // additive: click (or Enter/Space while focused) toggles that box's own
+    // .tile-eq-detail — independent per box, own listener rather than
+    // reusing considerHost's click handler above, since these boxes carry
+    // no data-idx into CONSIDERATIONS for that handler to look up anyway.
+    function toggleEqBox(box){
+      var detail=box.querySelector(".tile-eq-detail");
+      var open=box.getAttribute("aria-expanded")==="true";
+      box.setAttribute("aria-expanded",open?"false":"true");
+      detail.hidden=open;
+    }
+    Array.prototype.forEach.call(document.querySelectorAll(".tile-eq-box"),function(box){
+      box.addEventListener("click",function(e){
+        // stop here — these boxes share the .tile class with the real
+        // value-tiles above, and considerHost's own click handler (bound
+        // lower down) treats any .tile click as one of those, looking it
+        // up by data-group/data-idx neither of these boxes have
+        e.stopPropagation();
+        if(e.target.closest("a"))return; // let the technical-report link navigate normally
+        toggleEqBox(box);
+      });
+      box.addEventListener("keydown",function(e){
+        if(e.target!==box)return; // don't hijack Enter/Space aimed at the nested link
+        if(e.key==="Enter"||e.key===" "){e.preventDefault();toggleEqBox(box);}
+      });
+    });
 
     // Additive: closes any open two-bound overlay in a row and restores its
     // tile to the plain, unopened state — shared by "open a different tile"
