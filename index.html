@@ -85,6 +85,11 @@ h2.headline a:hover,h2.headline a:focus-visible{text-decoration-color:currentCol
 .block{background:var(--white);padding:clamp(20px,3vw,34px);margin-top:32px}
 .block h3.sec,.block summary.sec{font-weight:800;font-size:clamp(1.35rem,2.8vw,1.95rem);letter-spacing:-.025em;line-height:1.05;margin:.35em 0 .4em;color:var(--near-black)}
 .block .lede{max-width:68ch;color:var(--gray-text);font-size:.95rem;margin:0}
+/* additive: a couple of short, single-sentence ledes stretch to the full
+   container width instead of wrapping early at 68ch — scoped to just
+   these via .lede-wide rather than changing the shared rule above, since
+   the page's longer .lede paragraphs read better kept at that width */
+.block .lede.lede-wide{max-width:none}
 .beyond .lede{text-align:left;margin:0;max-width:none}
 .beyond .lede+.lede{margin-top:.9em}
 .note{background:var(--pale);padding:14px 16px;font-size:.87rem;margin:20px 0 0}
@@ -383,6 +388,14 @@ input.tfp-card:focus{background:rgba(255,255,255,.16);box-shadow:0 0 0 2px rgba(
   border-radius:4px;padding:1px 7px;
 }
 .tfp-annual-value.tfp-num{border-color:rgba(168,188,154,.5)}
+/* tfp-period-years is an <input> now (directly editable) — inherit the
+   surrounding text's font/color (inputs don't do this by default) and
+   size to its short numeric content rather than a default ~20-char box */
+.tfp-period-years-input{
+  font:inherit;color:inherit;width:2.4em;text-align:center;outline:none;cursor:text;
+}
+.tfp-period-years-input:hover{background:rgba(255,255,255,.14)}
+.tfp-period-years-input:focus{background:rgba(255,255,255,.2)}
 
 .dial{background:var(--white);padding:24px clamp(16px,2.4vw,26px);margin-bottom:14px}
 /* the horizon slider sits directly under .dialgrid (not one of its own
@@ -1284,7 +1297,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
       </div>
     </div>
     <div class="tfp-bottom">
-      <span class="tfp-period" id="tfp-period"><span class="tfp-num" id="tfp-period-pct">0.66%</span> over <span class="tfp-num" id="tfp-period-years">10</span> years</span>
+      <span class="tfp-period" id="tfp-period"><span class="tfp-num" id="tfp-period-pct">0.66%</span> over <input class="tfp-num tfp-period-years-input" id="tfp-period-years" type="text" inputmode="numeric" value="10" aria-label="Years, exact value"> years</span>
       <span class="tfp-annual"><span class="tfp-annual-label">implied annual gain:</span> <span class="tfp-num tfp-annual-value" id="tfp-annual-value">0.07 pp / yr</span></span>
     </div>
   </div>
@@ -1843,7 +1856,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
     <div class="notes">
       <div>
         <h3 class="sec">Alternative Scenarios Considered by the Economists</h3>
-        <p class="lede">This section allows you to explore other considerations the economists make in their papers.</p>
+        <p class="lede lede-wide">This section allows you to explore other considerations the economists make in their papers.</p>
         <p class="notes-sub">Acemoglu's variants</p>
         <ul class="check-list">
           <li><b>0.53%</b> — hard-to-learn tasks. 72.6% of exposed tasks by wage bill are easy; cost savings on the rest assumed at 7% rather than 27%. The estimate he considers most reasonable.</li>
@@ -1900,7 +1913,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
   <section class="block">
     <p class="eyebrow" style="display:none">Contribute</p>
     <h3 class="sec">Know an estimate we're missing?</h3>
-    <p class="lede">Send us a study, and we will consider it for the number line above. Only the first two fields are required.</p>
+    <p class="lede lede-wide">Send us a study, and we will consider it for the number line above. Only the first two fields are required.</p>
 
     <form id="submitForm" class="submitform" action="https://formspree.io/f/YOUR_FORM_ID" method="post">
       <div class="formgrid">
@@ -3768,10 +3781,33 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
     var cumPct=parseFloat(fOutEl.textContent),horizon=parseFloat(hEl.value);
     if(isNaN(cumPct)||isNaN(horizon))return;
     pctDst.textContent=cumPct.toFixed(2)+"%";
-    yearsDst.textContent=horizon;
+    // tfp-period-years is an <input> now (directly editable) — skip
+    // writing it while the user is actively editing it, same as the four
+    // term inputs above
+    if(document.activeElement!==yearsDst)yearsDst.value=horizon;
     if(annualSrc)annualDst.textContent=annualSrc.textContent;
   }
   updateBottomLine();
+
+  // additive: tfp-period-years commits to the horizon slider itself, same
+  // blur/Enter pattern as the four term inputs above
+  (function(){
+    var yearsInput=document.getElementById("tfp-period-years"),horizonSlider=document.getElementById("s-horizon");
+    if(!yearsInput||!horizonSlider)return;
+    function commit(){
+      var v=parseFloat(yearsInput.value);
+      if(isNaN(v)){updateBottomLine();return;}
+      v=Math.min(parseFloat(horizonSlider.max),Math.max(parseFloat(horizonSlider.min),v));
+      horizonSlider.value=v;
+      horizonSlider.dispatchEvent(new Event("input",{bubbles:true}));
+      updateBottomLine();
+    }
+    yearsInput.addEventListener("blur",commit);
+    yearsInput.addEventListener("keydown",function(e){
+      if(e.key==="Enter"){e.preventDefault();yearsInput.blur();}
+    });
+    yearsInput.addEventListener("focus",function(){yearsInput.select();});
+  })();
   // fr2-left-text is written by updateHorizonRow() on every trigger path
   // (slider drag, number input, horizon tick click, or a fOut change) —
   // observing it, rather than re-wiring each of those paths separately,
