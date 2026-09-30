@@ -1082,7 +1082,13 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
    equal specificity to any class rule and loses to it once that class
    rule is also present, so setting display here would defeat [hidden]
    entirely and the detail would show up always, toggle or not */
-.tile-eq-detail{margin-top:14px}
+/* width:100% — without it this flex item shrinks to its own content's
+   width (the equation's), so it isn't centered on the tile's true center.
+   display:flex + align-items:center centers the caption reliably — its
+   own margin:auto centering (against max-width:46ch) wasn't resolving to
+   a nonzero offset for reasons not worth chasing further, flex sidesteps
+   it entirely. */
+.tile-eq-detail{margin-top:14px;width:100%;display:flex;flex-direction:column;align-items:center}
 .tile-eq{
   margin:2px 0;font-family:var(--mono);font-size:.78rem;line-height:1.5;
   color:var(--near-black);max-width:100%;
@@ -3082,7 +3088,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
     // inside a <button>. No MathJax/KaTeX is loaded on this page, so
     // subscripts/superscripts are plain <sub>/<sup>. Box 2's equation is
     // split into two nowrap spans (.eq-chunk) with an ordinary breakable
-    // space between them, right after "ln[" — so at widths where it
+    // space between them, right after "ln[ s_K,t0" — so at widths where it
     // doesn't fit on one line, the browser's own wrapping breaks exactly
     // there instead of mid-expression anywhere else.
     considerHost.insertAdjacentHTML("beforeend",
@@ -3103,8 +3109,8 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
               '<span class="tile-value tile-eq-title">Full specification</span>'+
               '<div class="tile-eq-detail" hidden>'+
                 '<div class="tile-eq">'+
-                  '<span class="eq-chunk">&Delta; ln TFP<sub>t</sub> &approx; &minus;[1/(1&minus;&sigma;)] &middot; ln[</span> '+
-                  '<span class="eq-chunk">s<sub>K,t0</sub> + s<sub>L,t0</sub> ( 1 &minus; m<sub>t</sub> d<sub>t</sub> ( 1 &minus; e<sup>&minus;(1&minus;&sigma;)a<sub>t</sub></sup> ) ) e<sup>&minus;(1&minus;&sigma;)&Delta; ln A<sub>t</sub></sup> ]</span>'+
+                  '<span class="eq-chunk">&Delta; ln TFP<sub>t</sub> &approx; &minus;[1/(1&minus;&sigma;)] &middot; ln[ s<sub>K,t0</sub></span> '+
+                  '<span class="eq-chunk">+ s<sub>L,t0</sub> ( 1 &minus; m<sub>t</sub> d<sub>t</sub> ( 1 &minus; e<sup>&minus;(1&minus;&sigma;)a<sub>t</sub></sup> ) ) e<sup>&minus;(1&minus;&sigma;)&Delta; ln A<sub>t</sub></sup> ]</span>'+
                 '</div>'+
                 '<p class="tile-eq-caption">Full specification Korinek et al.\'s simulation runs on. For more information see their technical report: '+
                   '<a href="https://www-cdn.anthropic.com/files/4zrzovbb/website/cf58f84d46a4a76bf5a5b039ac695fba6b80041c.pdf" target="_blank" rel="noopener">link</a>.</p>'+
