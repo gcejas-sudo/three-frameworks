@@ -1020,6 +1020,10 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
 /* number on top, label below — same value/tag relationship as the tile
    itself underneath, just sized down to fit half the tile's width */
 .bound-value{font-family:var(--mono);font-size:.95rem;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+/* additive: the measure this bound belongs to (e.g. "Share of GDP
+   exposed") — once the overlay opens, it covers the tile's own .tile-tag
+   underneath, so without this a picked bound loses that context entirely */
+.bound-tag{font-family:var(--mono);font-size:.62rem;line-height:1.3;color:#ffffffb0;max-width:11em;margin-top:2px}
 .bound-label{font-family:var(--mono);font-size:.56rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;line-height:1.3}
 /* selected bound: same navy fill as the rest of the panel's "selected" state
    (.tile.is-active) — the underline marks which half is picked without
@@ -1089,6 +1093,13 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
    a nonzero offset for reasons not worth chasing further, flex sidesteps
    it entirely. */
 .tile-eq-detail{margin-top:14px;width:100%;display:flex;flex-direction:column;align-items:center}
+/* this exact display:flex is what broke the [hidden] toggle last time —
+   any class rule setting `display` on this element ties [hidden]'s own
+   display:none on specificity and wins as the later, author-side rule,
+   so the content stayed visible regardless of the attribute. This wins
+   over the rule above on specificity ([hidden] as attribute selector
+   doubles it), so [hidden] is finally the one guaranteed to win. */
+.tile-eq-detail[hidden]{display:none}
 .tile-eq{
   margin:2px 0;font-family:var(--mono);font-size:.78rem;line-height:1.5;
   color:var(--near-black);max-width:100%;
@@ -2992,6 +3003,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
       function boundBtnHTML(b,which){
         return '<button type="button" class="bound-btn" data-idx="'+idx+'" data-bound="'+which+'" aria-pressed="false">'+
           '<span class="bound-value">'+b.input+'</span>'+
+          '<span class="bound-tag">'+it.tag+'</span>'+
           '<span class="bound-label">'+b.label+'</span>'+
         '</button>';
       }
