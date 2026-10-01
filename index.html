@@ -40,6 +40,12 @@
   /* Korinek et al. — this page only (ThreeFrameworks.html) */
   --korinek:#8B3A00;
   --korinek-tint:#C98B5A;
+  /* mid-tone between the two above, for .kor-slash text specifically —
+     korinek-tint alone measured 2.87:1 on white as text (fails WCAG AA's
+     4.5:1), but darkening it all the way to --korinek loses the intended
+     de-emphasis against the values it separates. This passes 4.5:1+ on
+     every background it actually renders on (white, pale, page). */
+  --korinek-slash:#A35922;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -170,7 +176,7 @@ table.compare thead th.kor{color:var(--white);text-align:center}
    Average Cost Savings row, holds two differently-sized value lines). */
 table.compare .kor-values{white-space:nowrap;width:fit-content;margin:0 auto}
 table.compare .kor-values2{margin-top:10px}
-table.compare .kor-slash{color:var(--korinek-tint);font-weight:400}
+table.compare .kor-slash{color:var(--korinek-slash);font-weight:400}
 table.compare .kor-sub{display:block;margin-top:3px;font-family:var(--sans);font-weight:400;font-size:11px;letter-spacing:0;white-space:normal;color:var(--korinek)}
 table.compare th.kor .th-sub{display:block;margin-top:4px;font-family:var(--sans);font-weight:400;font-size:.62rem;letter-spacing:.02em;text-transform:none;color:var(--white)}
 /* scenario toggle — same tactile language as .marker on the numberlines
@@ -642,7 +648,7 @@ details.prov summary:focus-visible{outline:2px solid var(--blue);outline-offset:
 .prov-row .val{font-family:var(--mono);font-weight:700;font-size:21px;color:var(--near-black);margin:.3em 0 0}
 .prov-row .kor-scenario-key{font-size:10.5px;color:var(--korinek);margin:.35em 0 0}
 .prov-row .kor-def{font-size:11px;color:var(--korinek);margin:.3em 0 0}
-.prov-row .val .kor-slash{color:var(--korinek-tint);font-weight:400}
+.prov-row .val .kor-slash{color:var(--korinek-slash);font-weight:400}
 /* three Korinek values don't fit the 172px column at 21px on one line —
    shrink and pin to a single line rather than let it wrap mid-number, and
    tighten the slash gap (margin, not a literal space character) to help
@@ -3140,7 +3146,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
         '<div class="tile-row">'+
           '<div class="tile-cell tile-cell-wide">'+
             '<div class="tile tile-eq-box" role="button" tabindex="0" aria-expanded="false">'+
-              '<span class="tile-value tile-eq-title">TFP equation with ideas component</span>'+
+              '<span class="tile-value tile-eq-title">TFP Equation with Ideas Component</span>'+
               '<div class="tile-eq-detail" hidden>'+
                 '<div class="tile-eq"><span class="eq-chunk">&Delta; ln TFP<sub>t</sub> &approx; s<sub>L,t0</sub> ( &Delta; ln A<sub>t</sub> + m<sub>t</sub> d<sub>t</sub> a<sub>t</sub> )</span></div>'+
                 '<p class="tile-eq-caption">Includes an ideas stock component.</p>'+
@@ -3149,7 +3155,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
           '</div>'+
           '<div class="tile-cell tile-cell-wide">'+
             '<div class="tile tile-eq-box" role="button" tabindex="0" aria-expanded="false">'+
-              '<span class="tile-value tile-eq-title">Full specification</span>'+
+              '<span class="tile-value tile-eq-title">Full Specification</span>'+
               '<div class="tile-eq-detail" hidden>'+
                 '<div class="tile-eq">'+
                   '<span class="eq-chunk">&Delta; ln TFP<sub>t</sub> &approx; &minus;[1/(1&minus;&sigma;)] &middot; ln[ s<sub>K,t0</sub></span> '+
