@@ -179,6 +179,32 @@ table.compare .kor-values2{margin-top:10px}
 table.compare .kor-slash{color:var(--korinek-slash);font-weight:400}
 table.compare .kor-sub{display:block;margin-top:3px;font-family:var(--sans);font-weight:400;font-size:11px;letter-spacing:0;white-space:normal;color:var(--korinek)}
 table.compare th.kor .th-sub{display:block;margin-top:4px;font-family:var(--sans);font-weight:400;font-size:.62rem;letter-spacing:.02em;text-transform:none;color:var(--white)}
+/* additive: permanent Modest/Substantial/Extreme sub-header row — uses
+   --korinek-tint rather than the literal --korinek brown the spec named,
+   since --korinek measures only 1.85:1 against the navy header (fails
+   WCAG AA badly); --korinek-tint measures 5.02:1 and reads the same
+   "Korinek brown" family against this specific dark background. */
+/* table.compare thead th.kor{color:var(--white)} (above) outranks a bare
+   .kor-subhead on specificity — same fix as kor-rule-head below */
+table.compare thead th.kor.kor-subhead{font-weight:400;font-size:.6rem;color:var(--korinek-tint)}
+/* table.compare thead th{border:none} (above) outranks a bare
+   .kor-rule-head on specificity and would otherwise reset this back off —
+   table.compare thead th.kor-rule-head matches or beats it */
+table.compare thead th.kor-rule-head{border-left:1px solid rgba(255,255,255,.18)}
+.kor-rule-body{border-left:0.5px solid #e2e2e2}
+/* the definition caption now sits on its own row beneath each component's
+   values (so it can span just the three Korinek columns) — the value row
+   above it drops its bottom rule so only one line (on the caption row)
+   separates this component from the next, same as before the split */
+.kor-value-row td{border-bottom:none}
+.kor-cap-filler{background:transparent}
+.kor-cap-cell{text-align:center;font-family:var(--sans);font-weight:400;font-size:11px;color:var(--korinek);padding-top:0}
+table.compare td.component-label{white-space:nowrap}
+.table-scroll{overflow-x:auto}
+/* additive: flat gray sub-line across all five Resulting TFP Gain
+   columns, including Acemoglu/Aghion & Bunel's (previously their
+   accent color dimmed via opacity) */
+table.compare .tfp-note{color:#666;opacity:1}
 /* scenario toggle — same tactile language as .marker on the numberlines
    (tint fill, lift + shadow on hover, press-down on active, solid fill
    when selected) so it reads as the same kind of clickable control,
@@ -1172,9 +1198,10 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
     <p class="eyebrow" style="display:none">Published values</p>
     <h3 class="sec" style="display:none">The Two Sets of Assumptions, Side by Side</h3>
     <h3 class="sec">The Three Economists' Assumptions, Side by Side</h3>
+    <div class="table-scroll">
     <table class="compare">
       <thead>
-        <tr>
+        <tr style="display:none">
           <th scope="col">Component</th>
           <th scope="col" class="n">Acemoglu</th>
           <th scope="col" class="n">Aghion &amp; Bunel</th>
@@ -1187,52 +1214,99 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
             </div>
           </th>
         </tr>
+        <!-- additive: permanent two-row header replacing the scenario-tab
+             single column above (hidden, not deleted) — Component/
+             Acemoglu/Aghion & Bunel span both header rows, Korinek et al.
+             spans three columns with Modest/Substantial/Extreme beneath -->
+        <tr>
+          <th scope="col" rowspan="2">Component</th>
+          <th scope="col" class="n" rowspan="2">Acemoglu</th>
+          <th scope="col" class="n" rowspan="2">Aghion &amp; Bunel</th>
+          <th scope="col" class="n kor kor-rule-head" colspan="3">Korinek et al.</th>
+        </tr>
+        <tr>
+          <th scope="col" class="n kor kor-subhead kor-rule-head">Modest</th>
+          <th scope="col" class="n kor kor-subhead">Substantial</th>
+          <th scope="col" class="n kor kor-subhead">Extreme</th>
+        </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>GDP Share of Exposed Tasks</td>
+        <tr class="kor-value-row">
+          <td class="component-label">GDP Share of Exposed Tasks</td>
           <td class="n ace">20%</td>
           <td class="n agh">60%</td>
           <td class="n" style="display:none">3.0×</td>
-          <td class="n kor"><div class="kor-values" data-scgroup><span class="kor-num" data-sc="0">20%</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="1">30%</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="2">50%</span></div><span class="kor-sub">affected mass of tasks</span></td>
+          <td class="n kor" style="display:none"><div class="kor-values" data-scgroup><span class="kor-num" data-sc="0">20%</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="1">30%</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="2">50%</span></div><span class="kor-sub">affected mass of tasks</span></td>
+          <td class="n kor kor-rule-body">20%</td>
+          <td class="n kor">30%</td>
+          <td class="n kor">50%</td>
         </tr>
-        <tr>
-          <td>Share of Exposed Tasks That Are Profitable to Automate</td>
+        <tr class="kor-cap-row">
+          <td colspan="3" class="kor-cap-filler"></td>
+          <td colspan="3" class="kor-cap-cell kor-rule-body">affected mass of tasks</td>
+        </tr>
+        <tr class="kor-value-row">
+          <td class="component-label">Share of Exposed Tasks That Are Profitable to Automate</td>
           <td class="n ace">23%</td>
           <td class="n agh">50%</td>
           <td class="n" style="display:none">2.2×</td>
-          <td class="n kor"><div class="kor-values" data-scgroup><span class="kor-num" data-sc="0">20%</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="1">40%</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="2">60%</span></div><span class="kor-sub">diffusion share of instances</span></td>
+          <td class="n kor" style="display:none"><div class="kor-values" data-scgroup><span class="kor-num" data-sc="0">20%</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="1">40%</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="2">60%</span></div><span class="kor-sub">diffusion share of instances</span></td>
+          <td class="n kor kor-rule-body">20%</td>
+          <td class="n kor">40%</td>
+          <td class="n kor">60%</td>
         </tr>
-        <tr>
-          <td>Average Cost Savings from AI</td>
+        <tr class="kor-cap-row">
+          <td colspan="3" class="kor-cap-filler"></td>
+          <td colspan="3" class="kor-cap-cell kor-rule-body">diffusion share of instances</td>
+        </tr>
+        <tr class="kor-value-row">
+          <td class="component-label">Average Cost Savings from AI</td>
           <td class="n ace">27%</td>
           <td class="n agh">40%</td>
           <td class="n" style="display:none">1.5×</td>
-          <td class="n kor">
+          <td class="n kor" style="display:none">
             <div class="kor-values" data-scgroup><span class="kor-num" data-sc="0">0.3</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="1">0.45</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="2">0.8</span></div><span class="kor-sub">log unit-cost decline per instance</span>
             <!-- productivity gain = e^x − 1 applied to the log unit-cost decline at left -->
             <div class="kor-values kor-values2" data-scgroup><span class="kor-num" data-sc="0">35.0%</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="1">56.8%</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="2">122.6%</span></div><span class="kor-sub">productivity gain per instance</span>
           </td>
+          <td class="n kor kor-rule-body">0.30</td>
+          <td class="n kor">0.45</td>
+          <td class="n kor">0.80</td>
         </tr>
-        <tr>
-          <td>AI-Exposure-Adjusted Labor Share of Value Added</td>
+        <tr class="kor-cap-row">
+          <td colspan="3" class="kor-cap-filler"></td>
+          <td colspan="3" class="kor-cap-cell kor-rule-body">log unit-cost decline per instance</td>
+        </tr>
+        <tr class="kor-value-row">
+          <td class="component-label">AI-Exposure-Adjusted Labor Share of Value Added</td>
           <td class="n ace">53.5%</td>
           <td class="n agh">57%</td>
           <td class="n" style="display:none">1.07×</td>
-          <td class="n kor"><div class="kor-values kor-single"><span>60%</span></div><span class="kor-sub">base-period labor share, unadjusted</span></td>
+          <td class="n kor" style="display:none"><div class="kor-values kor-single"><span>60%</span></div><span class="kor-sub">base-period labor share, unadjusted</span></td>
+          <td class="n kor kor-rule-body">60%</td>
+          <td class="n kor">60%</td>
+          <td class="n kor">60%</td>
+        </tr>
+        <tr class="kor-cap-row">
+          <td colspan="3" class="kor-cap-filler"></td>
+          <td colspan="3" class="kor-cap-cell kor-rule-body">base-period labor share, unadjusted</td>
         </tr>
         <tr>
-          <td>Resulting TFP Gain</td>
-          <td class="n ace">0.07pp/yr<span class="tfp-note">0.66% over ten years</span></td>
-          <td class="n agh">0.68pp/yr<span class="tfp-note">6.8% over ten years</span></td>
+          <td class="component-label">Resulting TFP Gain</td>
+          <td class="n ace">0.07pp/yr<span class="tfp-note">0.66% / 10 yrs</span></td>
+          <td class="n agh">0.68pp/yr<span class="tfp-note">6.8% / 10 yrs</span></td>
           <td class="n" style="display:none">≈10×</td>
-          <td class="n kor">
+          <td class="n kor" style="display:none">
             <div class="kor-values" data-scgroup><span class="kor-num" data-sc="0">0.12pp/yr</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="1">0.51pp/yr</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="2">2.10pp/yr</span></div>
             <span class="kor-sub"><span class="kor-values" data-scgroup><span class="kor-num" data-sc="0">0.7%</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="1">3.1%</span><span class="kor-slash" data-sc-sep> / </span><span class="kor-num" data-sc="2">13.4%</span></span> over six years, to 2030</span>
           </td>
+          <td class="n kor kor-rule-body">0.12pp/yr<span class="tfp-note">0.7% / 6 yrs</span></td>
+          <td class="n kor">0.51pp/yr<span class="tfp-note">3.1% / 6 yrs</span></td>
+          <td class="n kor">2.10pp/yr<span class="tfp-note">13.4% / 6 yrs</span></td>
         </tr>
       </tbody>
     </table>
+    </div>
     <p class="compare-foot" style="display:none">The labels in orange are Korinek et al.'s inputs for three scenarios of AI growth. The differences with Acemoglu and Aghion &amp; Bunel's shared definitions of values are further explained below.</p>
     <details class="kor-harmonize">
       <summary>A NOTE ON HARMONIZING KORINEK'S VALUES</summary>
