@@ -193,15 +193,14 @@ table.compare thead th.kor.kor-subhead{font-weight:400;font-size:.6rem;color:var
    Bunel, whose rowspan=2 centers them against the full two-row height.
    Bottom-aligning brings it down to the same line as those two, at the
    cost of sitting a bit closer to the Modest/Substantial/Extreme row. */
-/* the position:relative pixel-offset approach this replaced could only
-   ever approximate the gap (and fully closing it collided with the
-   Modest/Substantial/Extreme row below). The actual fix: top-align the
-   whole row-1 header group instead of centering it. Component/Acemoglu/
-   Aghion & Bunel's rowspan=2 cells were centering against the full
-   two-row height while "Korinek et al." (rowspan=1) centered against
-   row 1's shorter height alone — top-aligning both puts their text at
-   the same natural starting position with no fragile offset needed. */
-table.compare thead tr:nth-child(2)>th{vertical-align:top}
+/* reverted: top-aligning Component/Acemoglu/Aghion & Bunel left a lot of
+   empty space below their single line of text in their (taller) rowspan
+   box, which read as visually broken on its own regardless of how it
+   aligned with "Korinek et al." Back to the default vertical-align:middle
+   (from table.compare thead th above) for all of row 1 — this leaves
+   "Korinek et al." centered in row 1's own shorter height, sitting a bit
+   higher than Acemoglu/Aghion & Bunel again, but each group now looks
+   correct on its own terms. */
 /* table.compare thead th{border:none} (above) outranks a bare
    .kor-rule-head on specificity and would otherwise reset this back off —
    table.compare thead th.kor-rule-head matches or beats it */
