@@ -187,6 +187,18 @@ table.compare th.kor .th-sub{display:block;margin-top:4px;font-family:var(--sans
 /* table.compare thead th.kor{color:var(--white)} (above) outranks a bare
    .kor-subhead on specificity — same fix as kor-rule-head below */
 table.compare thead th.kor.kor-subhead{font-weight:400;font-size:.6rem;color:var(--white)}
+/* "Korinek et al." only spans row 1 (rowspan isn't used on it), so
+   vertical-align:middle (the thead th default) centers it against row 1's
+   own shorter height alone — sitting visibly higher than Acemoglu/Aghion &
+   Bunel, whose rowspan=2 centers them against the full two-row height.
+   Bottom-aligning brings it down to the same line as those two, at the
+   cost of sitting a bit closer to the Modest/Substantial/Extreme row. */
+/* padding/vertical-align both feed into the browser's rowspan height-
+   distribution math, so adjusting either just dragged Acemoglu/Aghion &
+   Bunel's own center down by roughly the same amount, leaving the gap
+   unchanged. position:relative moves the rendered text without affecting
+   row-height calculations at all, so it actually closes the gap. */
+table.compare thead th.kor-group-label{position:relative;top:9px}
 /* table.compare thead th{border:none} (above) outranks a bare
    .kor-rule-head on specificity and would otherwise reset this back off —
    table.compare thead th.kor-rule-head matches or beats it */
@@ -1222,7 +1234,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
           <th scope="col" rowspan="2">Component</th>
           <th scope="col" class="n" rowspan="2">Acemoglu</th>
           <th scope="col" class="n" rowspan="2">Aghion &amp; Bunel</th>
-          <th scope="col" class="n kor kor-rule-head" colspan="3">Korinek et al.</th>
+          <th scope="col" class="n kor kor-rule-head kor-group-label" colspan="3">Korinek et al.</th>
         </tr>
         <tr>
           <th scope="col" class="n kor kor-subhead kor-rule-head">Modest</th>
