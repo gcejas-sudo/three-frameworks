@@ -300,6 +300,12 @@ footer.site .updated{margin-top:18px;font-size:.78rem;color:#B9C4DC}
   margin:14px 0 16px;background:#eef1f8;border-radius:6px;padding:18px 20px;
   display:flex;gap:28px;
 }
+/* this exact display:flex-vs-[hidden] conflict has broken toggles
+   elsewhere in this file before — a class rule setting `display` ties
+   [hidden]'s own display:none on specificity and wins as the later,
+   author-side rule, so the panel stayed visible regardless of the
+   attribute. This explicit override guarantees [hidden] wins. */
+.metrics-panel[hidden]{display:none}
 .metrics-def{flex:1;margin:0;font-family:var(--sans)}
 .metrics-def b{display:block;margin-bottom:4px;color:#15265B;font-weight:700}
 .metrics-def .metrics-desc{display:block;color:#4a5165;font-size:12.5px;line-height:1.6}
