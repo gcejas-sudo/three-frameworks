@@ -293,10 +293,17 @@ footer.site .updated{margin-top:18px;font-size:.78rem;color:#B9C4DC}
 /* no display here — [hidden]'s own display:none must be the only thing
    controlling visibility, otherwise it gets overridden and the panel
    never actually hides (this exact bug has bitten this file before) */
-.metrics-panel{margin-top:14px;max-width:620px;background:#fff;border:1px solid #d9d9d9;border-radius:8px;padding:16px 18px}
-.metrics-def{margin:0 0 10px;font-family:var(--sans);font-size:12.5px;line-height:1.65;color:var(--near-black)}
-.metrics-def:last-of-type{margin-bottom:0}
-.metrics-def b{color:var(--navy)}
+/* no max-width — block width:auto already matches the .lede paragraph
+   below it exactly, since both are plain block children of .calc-head
+   with no side padding/margin of their own */
+.metrics-panel{
+  margin:14px 0 16px;background:#eef1f8;border-radius:6px;padding:18px 20px;
+  display:flex;gap:28px;
+}
+.metrics-def{flex:1;margin:0;font-family:var(--sans)}
+.metrics-def b{display:block;margin-bottom:4px;color:#15265B;font-weight:700}
+.metrics-def .metrics-desc{display:block;color:#4a5165;font-size:12.5px;line-height:1.6}
+@media(max-width:700px){.metrics-panel{flex-direction:column;gap:14px}}
 /* .formula-row2 above already carries a 40px bottom margin (meant to
    clear .dialgrid below it) — pulling this up compensates for that so the
    toggle sits close under the strip instead of floating well below it */
@@ -1341,7 +1348,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
     <details class="kor-harmonize">
       <summary>A NOTE ON HARMONIZING WITH KORINEK ET AL.&rsquo;S VALUES</summary>
       <div class="kor-harmonize-body" id="kor-harmonize-note">
-        <p>The labels in orange are Anton Korinek, Charles I. Jones, Szymon Sacher, Tess Cotter, and Peter McCrory&rsquo;s inputs for three scenarios of AI growth. The differences with Acemoglu&rsquo;s and Aghion &amp; Bunel&rsquo;s shared definitions are explained below. This section uses Korinek et al.&rsquo;s &ldquo;first-order approximation,&rdquo; which yields cumulative results close to their main model; the equation Korinek et al.&rsquo;s simulation actually runs on is discussed in Alternative Scenarios Considered by the Economists.</p>
+        <p>The labels in orange are Anton Korinek, Charles I. Jones, Szymon Sacher, Tess Cotter, and Peter McCrory&rsquo;s inputs for three scenarios of AI growth. The differences with Acemoglu&rsquo;s and Aghion &amp; Bunel&rsquo;s shared definitions are explained below. This section uses Korinek et al.&rsquo;s &ldquo;first-order approximation,&rdquo; which yields cumulative results close to their main model shown below; the equation Korinek et al.&rsquo;s simulation actually runs on is discussed in Alternative Scenarios Considered by the Economists.</p>
         <p>Korinek et al. do not publish an annualized rate. They report cumulative gains over six years, so the annual figures shown here are ours, computed as ln(1 + g)/6, where g is the cumulative gain as a decimal:</p>
         <p>— Applied to their published cumulative figures of 0.7 / 3.1 / 13.4%: 0.12 / 0.51 / 2.10 pp per year.</p>
         <p>— Applied to the first-order product of the four inputs, 0.72 / 3.24 / 14.40%: 0.12 / 0.53 / 2.25 pp per year.</p>
@@ -1357,9 +1364,9 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
       <button type="button" class="metrics-pill" id="metricsPillBtn" aria-expanded="false" aria-controls="metricsPanel">Learn more about growth metrics</button>
     </div>
     <div class="metrics-panel" id="metricsPanel" hidden>
-      <p class="metrics-def"><b>TFP</b> &mdash; Defined as the contribution of technological progress to economic growth, sometimes referred to as Multi Factor Productivity</p>
-      <p class="metrics-def"><b>Labor Productivity</b> &mdash; Defined as economic output divided by hours worked</p>
-      <p class="metrics-def"><b>GDP</b> &mdash; Defined as the value of the final goods and services produced in the United States</p>
+      <p class="metrics-def"><b>TFP</b><span class="metrics-desc">Defined as the contribution of technological progress to economic growth, sometimes referred to as Multi Factor Productivity</span></p>
+      <p class="metrics-def"><b>Labor Productivity</b><span class="metrics-desc">Defined as economic output divided by hours worked</span></p>
+      <p class="metrics-def"><b>GDP</b><span class="metrics-desc">Defined as the value of the final goods and services produced in the United States</span></p>
     </div>
     <p class="lede">The dials below can be set at Acemoglu's, Aghion &amp; Bunel's, Korinek et al.'s or your own preferred values. You can change between Acemoglu / Aghion &amp; Bunel's and Korinek et al.'s frameworks by choosing your preferred definition's button. We also include an estimate horizon dial that allows you to choose over what period the changes in TFP accumulate.</p>
   </div>
