@@ -565,11 +565,20 @@ input.tfp-card:focus{background:rgba(255,255,255,.16);box-shadow:0 0 0 2px rgba(
 .chip-korinek-label{display:inline-flex;align-items:center;gap:4px}
 .chip-korinek-label::after{content:"\25BE";font-size:10px;line-height:1;transition:transform .15s ease}
 .chip-korinek-label[aria-expanded="true"]::after{transform:rotate(180deg)}
-/* display:contents keeps the chips as direct flex items of .chip-row (so
-   they wrap/space exactly like the always-visible chips) while still being
-   toggleable as a group via the [hidden] attribute */
-.kor-chip-group{display:contents}
+/* flex-basis:100% makes the three scenario chips wrap as ONE unit onto their
+   own line. Under the previous display:contents they were individual flex
+   items of .chip-row and wrapped independently, which stranded "Modest" up
+   on the trigger's line with Substantial/Extreme below it.
+   The [hidden] override below is required: this rule's display: would
+   otherwise beat the UA's [hidden]{display:none} on a specificity tie. */
+.kor-chip-group{display:flex;flex-wrap:wrap;gap:4px;flex-basis:100%}
 .kor-chip-group[hidden]{display:none}
+/* The dial card is ~302px. At the shared .chip sizing these three came to
+   ~315px on the savings card (whose values read "0.30"/"0.45"/"0.80", a
+   character wider than the "20%"/"30%" on the others), so Extreme wrapped
+   alone onto a line of its own. Trimmed just enough that all three fit the
+   single line this group is meant to occupy, on every card. */
+.kor-chip-group .chip{font-size:10.5px;padding-left:6px;padding-right:6px}
 .track input[type=range]{display:block;width:100%}
 .field .num{margin-top:1px}
 .scale{position:relative;height:14px;margin-top:2px}
