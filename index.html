@@ -254,6 +254,11 @@ table.compare .tfp-note{display:block;margin-top:3px;font-family:var(--sans);fon
 .src-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:src}
 .src-list li{padding-left:1.6em;text-indent:-1.6em;counter-increment:src}
 .src-list li::before{content:counter(src) ". "}
+/* moved out of the navy footer, so the footer.site colour rules no longer
+   reach these — restated here for the light background */
+.page-meta{margin-top:46px;padding-top:20px;border-top:1px solid #d9d9d9}
+.page-meta p{margin:0;font-family:var(--mono);font-size:.76rem;line-height:1.65;color:var(--gray-text)}
+.page-meta .copy{margin-top:8px}
 .src-list i{font-style:italic}
 
 .notes .notes-sub{margin:26px 0 10px;font-family:var(--sans);font-size:.89rem;font-weight:700;color:var(--navy)}
@@ -1236,10 +1241,6 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
 
 <div class="wrap">
 
-  <div class="intro">
-    <span class="pill">Draft MIT Stone Center on Inequality and Shaping the Future of Work</span>
-  </div>
-
   <h2 class="headline" style="display:none">In two influential papers, both released in 2024, <a href="https://shapingwork.mit.edu/research/the-simple-macroeconomics-of-ai/" target="_blank" rel="noopener">Daron Acemoglu</a> and <a href="https://www.frbsf.org/wp-content/uploads/AI-and-Growth-Aghion-Bunel.pdf" target="_blank" rel="noopener">Philippe Aghion &amp; Simon Bunel</a> use the same formula to forecast the impact of AI on Total Factor Productivity (TFP), but they reach very different conclusions.<br><br>A comparison of their papers shows how the researchers' different input assumptions shape their forecasts.</h2>
   <!-- ThreeFrameworks.html only: three-paper opening in place of the two-paper original above -->
   <h2 class="headline">The seminal papers attempting to forecast the impact of AI on Total Factor Productivity (TFP), <a href="https://shapingwork.mit.edu/research/the-simple-macroeconomics-of-ai/" target="_blank" rel="noopener">Acemoglu (2024)</a>, <a href="https://www.frbsf.org/wp-content/uploads/AI-and-Growth-Aghion-Bunel.pdf" target="_blank" rel="noopener">Aghion and Bunel (2024)</a> and <a href="https://www-cdn.anthropic.com/files/4zrzovbb/website/cf58f84d46a4a76bf5a5b039ac695fba6b80041c.pdf" target="_blank" rel="noopener">Korinek et al. (2026)</a>, use similar formulas but reach very different conclusions.</h2>
@@ -2144,6 +2145,10 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
             </ul>
           </div>
         </details>
+        <div class="page-meta">
+          <p class="updated">Last Updated 11/13/2026</p>
+          <p class="copy">Cite As: Stone Center on Inequality and Shaping the Future of Work. "Forecasting the Impacts of AI on Productivity." 2026.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -2156,8 +2161,6 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
       <summary>AI disclosure</summary>
       <p>AI assistance was used to build this site, retrieve and summarize sources, and edit prose. All interpretation is the authors' own, and all figures were verified against the original papers.</p>
     </details>
-    <p class="updated">Last Updated 10/21/2026</p>
-    <p class="copy">Cite As: Stone Center on Inequality and Shaping the Future of Work. "Forecasting the Impacts of AI on Productivity." 2026.</p>
   </div>
 </footer>
 
