@@ -1287,6 +1287,11 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
   .metrictabs{flex-direction:column;align-items:stretch;gap:8px;padding:0;background:transparent;border-radius:0}
   .mtab{width:100%;white-space:normal;padding:11px 14px;font-size:.95rem}
 
+  /* the metrics pill sits inline beside the heading on a wide screen, but
+     wraps onto its own line here, where the lede's margin:0 left it butted
+     straight against the paragraph below */
+  .calc-head .lede{margin-top:16px}
+
   /* the comparison table hides ~590px to the right with nothing to say so.
      A gradient scroll-shadow on .table-scroll was tried first and does not
      work here: the table's own cells are opaque and paint straight over the
