@@ -217,6 +217,9 @@ table.compare thead th.kor-rule-head{border-left:1px solid rgba(255,255,255,.18)
 .kor-cap-cell{text-align:center;font-family:var(--sans);font-weight:400;font-size:11px;color:var(--korinek);padding-top:0}
 table.compare td.component-label{white-space:nowrap}
 .table-scroll{overflow-x:auto}
+/* shown only on phones, where the table actually overflows — see the
+   max-width:640px block near the end of this stylesheet */
+.scroll-hint{display:none;margin:0 0 10px;font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--gray-text)}
 /* additive: flat gray sub-line across all five Resulting TFP Gain
    columns, including Acemoglu/Aghion & Bunel's (previously their
    accent color dimmed via opacity) */
@@ -1267,6 +1270,28 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
   .tfp-bottom{flex-direction:column;align-items:flex-start;gap:10px}
   .tfp-period,.tfp-annual-label{font-size:14px}
   .tfp-annual-value{font-size:17px}
+
+  /* Estimate Horizon: its chips are absolutely positioned by percentage to
+     sit under their tick marks, which only works while the card is wide
+     enough. On a phone they overlapped each other and ran off the left
+     edge, so here they fall back to the same ordinary wrapping row the
+     other four dials use. position:static alone is enough — the inline
+     left:% becomes inert once the chip is no longer positioned. */
+  .chip-row-pinned{min-height:0;padding-top:10px;row-gap:6px}
+  .chip-row-pinned .chip{position:static;transform:none}
+
+  /* the metric tabs wrap to four stacked rows on a phone, which turned the
+     pill-shaped track behind them into one big grey ellipse — drop the
+     track and let them read as full-width stacked buttons instead */
+  .segwrap{width:100%}
+  .metrictabs{flex-direction:column;align-items:stretch;gap:8px;padding:0;background:transparent;border-radius:0}
+  .mtab{width:100%;white-space:normal;padding:11px 14px;font-size:.95rem}
+
+  /* the comparison table hides ~590px to the right with nothing to say so.
+     A gradient scroll-shadow on .table-scroll was tried first and does not
+     work here: the table's own cells are opaque and paint straight over the
+     container's background, so the stated hint carries this instead. */
+  .scroll-hint{display:block}
 }
 </style>
 </head>
@@ -1297,6 +1322,7 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
     <p class="eyebrow" style="display:none">Published values</p>
     <h3 class="sec" style="display:none">The Two Sets of Assumptions, Side by Side</h3>
     <h3 class="sec">The Three Sets of Assumptions, Side by Side</h3>
+    <p class="scroll-hint">Scroll sideways to see all three &rarr;</p>
     <div class="table-scroll">
     <table class="compare">
       <thead>
