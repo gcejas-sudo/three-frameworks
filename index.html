@@ -257,8 +257,20 @@ table.compare .tfp-note{display:block;margin-top:3px;font-family:var(--sans);fon
 .src-list li{padding-left:1.6em;text-indent:-1.6em;counter-increment:src}
 .src-list li::before{content:counter(src) ". "}
 /* moved out of the navy footer, so the footer.site colour rules no longer
-   reach these — restated here for the light background */
-.page-meta{margin-top:46px;padding-top:20px;border-top:1px solid #d9d9d9}
+   reach these — restated here for the light background. Same applies to
+   .ai-disclosure, whose every rule was footer.site-scoped. */
+/* sits inside .page-meta, matching the Last Updated / Cite As lines
+   exactly in font, size and colour — it reads as a third line of the
+   same block that happens to expand */
+.ai-disclosure{margin-top:8px}
+.ai-disclosure summary{cursor:pointer;list-style:none;font-family:var(--mono);font-size:.76rem;line-height:1.65;font-weight:400;color:var(--gray-text)}
+.ai-disclosure summary::-webkit-details-marker{display:none}
+/* margin rather than a trailing space in content: the space collapses */
+.ai-disclosure summary::before{content:"+";margin-right:.45em;font-family:var(--mono);font-size:.8em;vertical-align:.1em;color:var(--gray-text)}
+.ai-disclosure[open] summary::before{content:"\2212"}
+.ai-disclosure summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.ai-disclosure p{margin:10px 0 0;font-family:var(--mono);font-size:.76rem;line-height:1.65;color:var(--gray-text);max-width:70ch}
+.page-meta{margin-top:30px;padding-top:20px;border-top:1px solid #d9d9d9}
 .page-meta p{margin:0;font-family:var(--mono);font-size:.76rem;line-height:1.65;color:var(--gray-text)}
 .page-meta .copy{margin-top:8px}
 .src-list i{font-style:italic}
@@ -1224,6 +1236,38 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
 .eq-chunk{white-space:nowrap}
 .tile-eq-caption{margin:8px auto 0;max-width:46ch;font-size:.78rem;line-height:1.5;color:var(--gray-text);text-align:center}
 .tile-eq-caption a{color:var(--korinek)}
+
+/* ---------- phone layout ----------
+   Additive and scoped entirely to narrow viewports, so nothing above this
+   point changes at tablet or desktop widths. Fixes three things that only
+   go wrong once the TFP panel is squeezed below ~640px:
+   1. .tfp-head put its nowrap title and the Definition toggle on one row,
+      which ran ~127px past the screen and gave the whole PAGE a sideways
+      scroll — the single reason the site felt broken on a phone.
+   2. .tfp-eq is flex-wrap:nowrap, so the four value cards collapsed to
+      ~10px slivers and their captions clipped to two letters per line.
+   3. .tfp-bottom's two halves collided into "OverImplied Annual Gain".
+   The table keeps its own horizontal scroll container and is left alone. */
+@media(max-width:640px){
+  .tfp-head{flex-direction:column;align-items:flex-start;gap:10px}
+  .tfp-head-toggle{flex-wrap:wrap;gap:6px;max-width:100%}
+  .tfp-head-toggle .caption-mode-toggle{flex-wrap:wrap;white-space:normal;max-width:100%}
+  .tfp-head-toggle .mode-btn{padding:5px 10px}
+
+  /* let the equation break across rows instead of crushing every term */
+  .tfp-eq{flex-wrap:wrap;justify-content:center;gap:6px}
+  .tfp-term{flex:0 1 84px;min-width:84px}
+  .tfp-card{font-size:20px;padding:10px 4px}
+  .tfp-cap{height:auto;min-height:30px;font-size:9.5px;line-height:1.35}
+  .tfp-op{padding-top:12px;font-size:14px}
+  /* the result gets its own full-width row so it reads as the answer */
+  .tfp-result{flex:1 1 100%;min-width:0}
+  .tfp-result .tfp-card{font-size:30px;padding:12px 6px}
+
+  .tfp-bottom{flex-direction:column;align-items:flex-start;gap:10px}
+  .tfp-period,.tfp-annual-label{font-size:14px}
+  .tfp-annual-value{font-size:17px}
+}
 </style>
 </head>
 <body>
@@ -2150,21 +2194,16 @@ table.compare tbody tr:last-child td{border-bottom:none;background:var(--pale);f
         <div class="page-meta">
           <p class="updated">Last Updated 11/13/2026</p>
           <p class="copy">Cite As: Stone Center on Inequality and Shaping the Future of Work. "Forecasting the Impacts of AI on Productivity." 2026.</p>
+          <details class="ai-disclosure">
+            <summary>AI disclosure</summary>
+            <p>AI assistance was used to build this site, retrieve and summarize sources, and edit prose. All interpretation is the authors' own, and all figures were verified against the original papers.</p>
+          </details>
         </div>
       </div>
     </div>
   </section>
 
 </div>
-
-<footer class="site">
-  <div class="inner">
-    <details class="ai-disclosure">
-      <summary>AI disclosure</summary>
-      <p>AI assistance was used to build this site, retrieve and summarize sources, and edit prose. All interpretation is the authors' own, and all figures were verified against the original papers.</p>
-    </details>
-  </div>
-</footer>
 
 <script>
 (function(){
